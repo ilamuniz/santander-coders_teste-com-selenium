@@ -23,8 +23,6 @@ public class ScheduleTest {
         driver = new ChromeDriver(
                 new ChromeOptions().addArguments("--remote-allow-origins=*")
         );
-        //driver.get("http://localhost:8080/app/users");
-        //name = RandomStringUtils.randomAlphabetic(15);
     }
 
     @AfterAll
@@ -54,26 +52,27 @@ public class ScheduleTest {
     }
 
     @Test
+    @Order(2)
     public void verificarSeTemNomeUsernameEBotaoEditar() {
-        driver.get("http://localhost:8080/app/users");
+        //driver.get("http://localhost:8080/app/users");
 
         WebElement elementName = driver.findElement(
-                By.xpath("//*[text()='" + name + "']")
+                By.xpath("/html/body/div/div/div/div[2]/table/tbody/tr/td[1]")
         );
         WebElement elementUserName = driver.findElement(
-                By.xpath("//*[text()='" + username + "']")
+                By.xpath("/html/body/div/div/div/div[2]/table/tbody/tr/td[2]")
         );
-        elementName.getText();
-        elementUserName.getText();
 
         driver.findElement(By.xpath("/html/body/div/div/div/div[2]/table/tbody/tr/td[3]/a")).click();
 
-        assertNotNull(elementName);
-        assertNotNull(elementUserName);
+        // erro StaleElementReferenceException no elementName.getText()
+        assertEquals(name, elementName.getText());
+        assertEquals(username, elementUserName.getText());
         assertEquals("http://localhost:8080/app/users/edit/1", driver.getCurrentUrl());
     }
 
     @Test
+    @Order(3)
     public void naoMostrarSenhaAntiga() {
         driver.get("http://localhost:8080/app/users/edit/1");
 
@@ -85,38 +84,41 @@ public class ScheduleTest {
         assertTrue(resultado);
     }
 
-//    @Test
-//    public void cadastrarFilmeComTituloNull_naoPermitido() {
-//        driver.get("http://localhost:8080/app/movies");
-//
-//        driver.findElement(By.xpath("/html/body/div/div/div/div[2]/a")).click();
-//
-//        driver.findElement(By.id("genre")).sendKeys("Comédia");
-//        driver.findElement(By.id("rating")).sendKeys("10");
-//        driver.findElement(By.xpath("//form/button")).click();
-//
-//        WebElement element = driver.findElement(
-//                By.className("movie-form-error")
-//        );
-//        assertNotNull(element);
-//        assertEquals("must not be blank", element.getText());
-//    }
-//
-//    @Test
-//    public void cadastrarFilmeComNotaMaiorQue10_naoPermitido() {
-//        driver.get("http://localhost:8080/app/movies");
-//
-//        driver.findElement(By.xpath("/html/body/div/div/div/div[2]/a")).click();
-//
-//        driver.findElement(By.id("title")).sendKeys("Uma comédia");
-//        driver.findElement(By.id("genre")).sendKeys("Comédia");
-//        driver.findElement(By.id("rating")).sendKeys("11");
-//        driver.findElement(By.xpath("//form/button")).click();
-//
-//        String message = driver.findElement(By.id("rating")).getAttribute("validationMessage");
-//        assertEquals("Value must be less than or equal to 10.", message);
-//    }
-//
+    @Test
+    @Order(5)
+    public void permitirAtualizarNomeESenha() {
+        driver.get("http://localhost:8080/app/users/edit/1");
+
+        WebElement nome = driver.findElement(By.id("name"));
+        nome.clear();
+        nome.sendKeys("Mary Jane");
+
+        WebElement senha = driver.findElement(By.id("password"));
+        senha.sendKeys("abcdef");
+
+        driver.findElement(By.xpath("/html/body/div/div/div/div[2]/form/button")).click();
+
+        WebElement nomeAtualizado = driver.findElement(
+                By.xpath("/html/body/div/div/div/div[2]/table/tbody/tr/td[1]")
+        );
+        assertEquals("Mary Jane", nomeAtualizado.getText());
+    }
+
+    @Test
+    @Order(4)
+    public void naoPermitirAlterarUsername() {
+        driver.get("http://localhost:8080/app/users/edit/1");
+
+        WebElement campoUsername = driver.findElement(By.id("username"));
+        boolean resultado = false;
+
+        if (campoUsername.isEnabled()) {
+            resultado = true;
+        }
+
+        assertTrue(resultado);
+    }
+
 //    @Test
 //    @Order(2)
 //    public void listarFilmesCadastrados_encontrarSeleniumTest() {
