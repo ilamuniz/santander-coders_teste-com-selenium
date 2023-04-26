@@ -119,17 +119,17 @@ public class ScheduleTest {
         assertTrue(resultado);
     }
 
-//    @Test
-//    @Order(2)
-//    public void listarFilmesCadastrados_encontrarSeleniumTest() {
-//        driver.get("http://localhost:8080/app/movies");
-//
-//        WebElement element = driver.findElement(
-//                By.xpath("//*[text()='" + name + "']")
-//        );
-//        assertNotNull(element);
-//    }
-//
+    @Test
+    @Order(6)
+    public void listarUsuariosCadastrados() {
+        driver.get("http://localhost:8080/app/users");
+
+        WebElement element = driver.findElement(
+                By.xpath("/html/body/div/div/div/div[2]/table/tbody/tr/td[1]")
+        );
+        assertNotNull(element);
+    }
+
 //    @Test
 //    @Order(3)
 //    public void editarUmFilmeJaCadastrado() {
