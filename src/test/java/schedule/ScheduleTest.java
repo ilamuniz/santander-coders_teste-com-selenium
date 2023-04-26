@@ -132,7 +132,7 @@ public class ScheduleTest {
 
     @Test
     @Order(7)
-    public void editarUmFilmeJaCadastrado() {
+    public void naoPermitirCadastrarDoisUsuariosComMesmoUsername() {
         driver.get("http://localhost:8080/app/users");
 
         driver.findElement(By.className("create")).click();
