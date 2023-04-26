@@ -87,7 +87,7 @@ public class ScheduleTest {
     @Test
     @Order(5)
     public void permitirAtualizarNomeESenha() {
-        driver.get("http://localhost:8080/app/users/edit/1");
+        //driver.get("http://localhost:8080/app/users/edit/1");
 
         WebElement nome = driver.findElement(By.id("name"));
         nome.clear();
@@ -107,7 +107,7 @@ public class ScheduleTest {
     @Test
     @Order(4)
     public void naoPermitirAlterarUsername() {
-        driver.get("http://localhost:8080/app/users/edit/1");
+        //driver.get("http://localhost:8080/app/users/edit/1");
 
         WebElement campoUsername = driver.findElement(By.id("username"));
         boolean resultado = false;
@@ -130,40 +130,25 @@ public class ScheduleTest {
         assertNotNull(element);
     }
 
-//    @Test
-//    @Order(3)
-//    public void editarUmFilmeJaCadastrado() {
-//        driver.get("http://localhost:8080/app/movies");
-//
-//        WebElement editElement = driver.findElement(
-//                By.xpath("//td[text()='" + name + "']/following-sibling::td/a[text()='Edit']")
-//        );
-//        editElement.click();
-//
-//        name = RandomStringUtils.randomAlphabetic(20);
-//        WebElement titleElement = driver.findElement(By.id("title"));
-//        titleElement.clear();
-//        titleElement.sendKeys(name);
-//        driver.findElement(By.xpath("//form/button")).click();
-//
-//        WebElement movieElement = driver.findElement(
-//                By.xpath("//td[text()='" + name + "']")
-//        );
-//        assertNotNull(movieElement);
-//    }
-//
-//    @Test
-//    @Order(4)
-//    public void deletarUmFilmeCadastrado() {
-//        driver.get("http://localhost:8080/app/movies");
-//
-//        WebElement deleteElement = driver.findElement(
-//                By.xpath("//td[text()='" + name + "']/following-sibling::td/a[text()='Delete']")
-//        );
-//        deleteElement.click();
-//
-//        assertThrows(NoSuchElementException.class, () ->
-//                driver.findElement(By.xpath("//td[text()='" + name + "']"))
-//        );
-//    }
+    @Test
+    @Order(7)
+    public void editarUmFilmeJaCadastrado() {
+        driver.get("http://localhost:8080/app/users");
+
+        driver.findElement(By.className("create")).click();
+
+        name = "Diana Prince";
+        username = "hermionegranger";
+        driver.findElement(By.id("name")).sendKeys(name);
+        driver.findElement(By.id("username")).sendKeys(username);
+        driver.findElement(By.id("password")).sendKeys(RandomStringUtils.randomNumeric(4));
+        driver.findElement(By.xpath("/html/body/div/div/div/div[2]/form/button")).click();
+
+        WebElement element = driver.findElement(
+                By.className("user-form-error")
+        );
+
+        assertNotNull(element);
+        assertEquals("Username already in use", element.getText());
+    }
 }
